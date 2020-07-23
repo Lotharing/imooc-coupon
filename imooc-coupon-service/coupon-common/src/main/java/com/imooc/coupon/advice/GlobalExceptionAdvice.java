@@ -1,5 +1,6 @@
 package com.imooc.coupon.advice;
 
+import com.imooc.coupon.Enum.SystemEnum;
 import com.imooc.coupon.exception.CouponException;
 import com.imooc.coupon.vo.CommonResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +23,7 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(value = CouponException.class)
     public CommonResponse<String> handlerCouponException(HttpServletRequest request, CouponException ex){
-        CommonResponse<String> response = new CommonResponse<>(-1,"business error");
+        CommonResponse<String> response = new CommonResponse<>(SystemEnum.SYS_ERROR.getCode(),"business error");
         response.setData(ex.getMessage());
         return response;
     }

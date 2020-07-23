@@ -1,6 +1,7 @@
 package com.imooc.coupon.filter;
 
 import com.google.common.util.concurrent.RateLimiter;
+import com.imooc.coupon.Enum.SystemEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +31,7 @@ public class RateLimiterFilter extends AbstractPreZuulFilter{
             return success();
         }else{
             log.error("rate limit:{}",request.getRequestURI());
-            return fail(402,"error: rate limit");
+            return fail(SystemEnum.RATE_LIMIT.getCode(),"error: rate limit");
         }
     }
 

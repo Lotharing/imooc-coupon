@@ -1,5 +1,6 @@
 package com.imooc.coupon.filter;
 
+import com.imooc.coupon.Enum.SystemEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,7 @@ public class TokenFilter extends AbstractPreZuulFilter{
         Object token = request.getParameter("token");
         if (null==token){
             log.error("error: token is empty");
-            return fail(401,"error: token is empty");
+            return fail(SystemEnum.SC_UNAUTHORIZED.getCode(),"error: token is empty");
         }
         return success();
     }
