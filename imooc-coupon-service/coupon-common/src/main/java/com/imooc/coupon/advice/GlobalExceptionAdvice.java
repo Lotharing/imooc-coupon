@@ -1,6 +1,6 @@
 package com.imooc.coupon.advice;
 
-import com.imooc.coupon.Enum.SystemEnum;
+import com.imooc.coupon.constans.SystemEnum;
 import com.imooc.coupon.exception.CouponException;
 import com.imooc.coupon.vo.CommonResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;

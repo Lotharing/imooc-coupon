@@ -1,4 +1,4 @@
-package com.imooc.coupon.Enum;
+package com.imooc.coupon.constans;
 
 
 /**

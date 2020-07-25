@@ -1,6 +1,6 @@
 package com.imooc.coupon.filter;
 
-import com.imooc.coupon.Enum.SystemEnum;
+import com.imooc.coupon.constans.SystemEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
