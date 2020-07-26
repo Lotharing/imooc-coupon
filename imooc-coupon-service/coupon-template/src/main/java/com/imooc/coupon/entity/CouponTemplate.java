@@ -3,6 +3,10 @@ package com.imooc.coupon.entity;
 import com.imooc.coupon.constans.CouponCategory;
 import com.imooc.coupon.constans.DistributeTarget;
 import com.imooc.coupon.constans.ProductLine;
+import com.imooc.coupon.converter.CouponCategoryConverter;
+import com.imooc.coupon.converter.DistributeTargetConverter;
+import com.imooc.coupon.converter.ProductLineConverter;
+import com.imooc.coupon.converter.RuleConverter;
 import com.imooc.coupon.vo.TemplateRule;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -70,11 +74,13 @@ public class CouponTemplate {
      * 优惠卷分类
      */
     @Column(name = "category",nullable = false)
+    @Convert(converter = CouponCategoryConverter.class)
     private CouponCategory category;
     /**
      * 产品线
      */
     @Column(name = "product_line",nullable = false)
+    @Convert(converter = ProductLineConverter.class)
     private ProductLine productLine;
     /**
      * 总数
@@ -101,11 +107,13 @@ public class CouponTemplate {
      * 目标用户
      */
     @Column(name = "target",nullable = false)
+    @Convert(converter = DistributeTargetConverter.class)
     private DistributeTarget target;
     /**
      * 优惠卷规则
      */
     @Column(name = "rule",nullable = false)
+    @Convert(converter = RuleConverter.class)
     private TemplateRule rule;
 
     /**
