@@ -38,6 +38,14 @@ public class TemplateRule {
     private String weight;
 
     /**
+     * 校验功能
+     * @return
+     */
+    public boolean validate(){
+        return expiration.validate() && discount.validate() && limitation.intValue()>0 && usage.vaildate() && StringUtils.isNotEmpty(weight);
+    }
+
+    /**
      * 如果是SHIFT变动的,那么gap有效记录领取后过期时间 + deadline是模板的有效期也有效
      * 不变动 deadline 作用有效日期
      */
