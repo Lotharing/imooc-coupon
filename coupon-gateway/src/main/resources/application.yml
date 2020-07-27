@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 9000
 spring:
   application:
     name: coupon-gateway
@@ -9,3 +9,21 @@ eureka:
     service-url:
       # 需要向哪个Eureka做服务注册
       defaultZone: http://localhost:8000/eureka/
+
+zuul:
+  prefix: /imooc
+  routes:
+    # 优惠卷模板微服务路由配置定义 1.template：命名 2.path 对应服务的 context-path 3.serviceId: application.name 4.strip-prefix: 是否跳过前缀,需要包含
+    template:
+      path: /coupon-template/**
+      serviceId: eureka-client-coupon-template
+      strip-prefix: false
+  host:
+    connect-timeout-millis: 15000
+    socket-timeout-millis: 60000
+
+ribbon:
+  ConnectTimeout: 15000
+  ReadTimeout: 15000
+
+

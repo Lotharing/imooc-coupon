@@ -37,6 +37,8 @@ public class CouponTemplateController {
     /**
      * <h2>构建优惠卷模板</h2>
      * 127.0.0.1:7001/coupon-template/template/build
+     * # 进入网关 -> prefix:imooc -> 通过:coupon-template转发到对应微服务 -> 映射到路由->/template/build  注:网关需要携带Token,过滤器验证
+     * 127.0.0.1:9000/imooc/coupon-template/template/build
      * @param request
      * @return
      * @throws CouponException
@@ -49,7 +51,8 @@ public class CouponTemplateController {
 
     /**
      * <h2>构造优惠券模板详情</h2>
-     * 127.0.0.1:7001/coupon-template/template/info
+     * 127.0.0.1:7001/coupon-template/template/info?id=1
+     * 127.0.0.1:9000/imooc/coupon-template/template/info?id=1
      * @param id
      * @return
      * @throws CouponException
@@ -63,6 +66,7 @@ public class CouponTemplateController {
     /**
      * <h2>查找所有可用的优惠券模板</h2>
      * 127.0.0.1:7001/coupon-template/template/sdk/all
+     * 127.0.0.1:9000/imooc/coupon-template/template/sdk/all
      * @return
      */
     @GetMapping("/template/sdk/all")
@@ -74,6 +78,7 @@ public class CouponTemplateController {
     /**
      * <h2>获取模板ids 到 CouponTemplateSDK 的映射</h2>
      * 127.0.0.1:7001/coupon-template/template/sdk/infos
+     * 127.0.0.1:9000/imooc/coupon-template/template/sdk/infos
      * @return
      */
     @GetMapping("/template/sdk/infos")
