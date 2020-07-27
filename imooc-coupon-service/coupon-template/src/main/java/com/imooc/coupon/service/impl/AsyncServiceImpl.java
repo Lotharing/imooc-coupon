@@ -34,7 +34,6 @@ public class AsyncServiceImpl implements IAsyncService {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    @Autowired
     /**
      * <h2>根据模板异步的创建优惠券码</h2>
      *
