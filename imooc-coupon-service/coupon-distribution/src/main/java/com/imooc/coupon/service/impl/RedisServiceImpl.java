@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -116,7 +117,7 @@ public class RedisServiceImpl implements IRedisService {
 
         switch (couponStatus){
             case USABLE:
-
+                result = addCouponToCacheForExpired(userId,coupons);
                 break;
             case USED:
                 break;
@@ -125,6 +126,36 @@ public class RedisServiceImpl implements IRedisService {
         }
 
         return result;
+    }
+
+    /**
+     * <h2>新增加优惠卷到 Cache 中, 新领取的</h2>
+     * @param userId
+     * @param coupons
+     * @return
+     * @throws CouponException
+     */
+    @SuppressWarnings("all")
+    private Integer addCouponToCacheForExpired(Long userId, List<Coupon> coupons)
+            throws CouponException {
+        // 如果 status 是 USABLE, 代表是新增加的优惠券
+        // 只会影响一个 Cache: USER_COUPON_USABLE
+        log.debug("Add Coupon To Cache For Expired.");
+
+        // 最终需要保存的 Cache
+        Map<String, String> needCachedObject = new HashMap<>(coupons.size());
+
+        coupons.forEach(c -> needCachedObject.put(c.getId().toString(),JSON.toJSONString(c)));
+
+        String redisKey = status2RedisKey(CouponStatus.USABLE.getCode(),userId);
+
+        redisTemplate.opsForHash().putAll(redisKey,needCachedObject);
+
+        log.info("Add {} Coupons To Cache: {}, {}",userId,redisKey);
+
+        redisTemplate.expire(redisKey,getRandomExpirationTime(1,2), TimeUnit.SECONDS);
+
+        return needCachedObject.size();
     }
 
     /**
