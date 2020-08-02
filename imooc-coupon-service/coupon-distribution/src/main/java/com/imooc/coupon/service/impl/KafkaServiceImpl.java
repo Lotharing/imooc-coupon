@@ -3,14 +3,19 @@ package com.imooc.coupon.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.imooc.coupon.constans.Constant;
 import com.imooc.coupon.constant.CouponStatus;
+import com.imooc.coupon.dao.CouponDao;
 import com.imooc.coupon.entity.Coupon;
 import com.imooc.coupon.service.IKafkaService;
 import com.imooc.coupon.vo.CouponKafkaMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -22,6 +27,9 @@ import java.util.Optional;
 @Slf4j
 @Component
 public class KafkaServiceImpl implements IKafkaService {
+
+    @Autowired
+    private CouponDao couponDao;
 
     /**
      * <h2>消费优惠券 Kafka 消息</h2>
@@ -44,11 +52,47 @@ public class KafkaServiceImpl implements IKafkaService {
                 case USABLE:
                     break;
                 case USED:
+                    processUsedCoupons(couponInfo,status);
                     break;
                 case EXPIRED:
+                    processExpiredCoupons(couponInfo,status);
                     break;
             }
         }
+    }
+
+    /**
+     * 封装一层： 可以在用户使用优惠卷时候做一些其他的操作
+     * <h2>处理已使用的用户优惠券</h2>
+     * */
+    private void processUsedCoupons(CouponKafkaMessage kafkaMessage,
+                                    CouponStatus status) {
+        // TODO 给用户发送短信
+        processCouponsByStatus(kafkaMessage, status);
+    }
+
+    /**
+     * <h2>处理过期的用户优惠券</h2>
+     * */
+    private void processExpiredCoupons(CouponKafkaMessage kafkaMessage,
+                                       CouponStatus status) {
+        // TODO 给用户发送推送
+        processCouponsByStatus(kafkaMessage, status);
+    }
+    /**
+     * <h2>根据状态处理优惠券信息</h2>
+     * @param kafkaMessage
+     * @param status
+     */
+    private void processCouponsByStatus(CouponKafkaMessage kafkaMessage,CouponStatus status){
+        List<Coupon> coupons = couponDao.findAllById(kafkaMessage.getIds());
+        if (CollectionUtils.isEmpty(coupons) || coupons.size()!=kafkaMessage.getIds().size()){
+            log.error("Can Not Find Right Coupon Info: {}",JSON.toJSONString(kafkaMessage));
+            return;
+        }
+        //修改DB的优惠卷状态
+        coupons.forEach(c -> c.setStatus(status));
+        log.info("CouponKafkaMessage Op Coupon Count: {}",couponDao.saveAll(coupons).size());
     }
 
 }
