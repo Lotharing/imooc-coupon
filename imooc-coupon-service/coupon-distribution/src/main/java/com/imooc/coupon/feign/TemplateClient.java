@@ -1,5 +1,6 @@
 package com.imooc.coupon.feign;
 
+import com.imooc.coupon.feign.hystrix.TemplateClientHystrix;
 import com.imooc.coupon.vo.CommonResponse;
 import com.imooc.coupon.vo.CouponTemplateSDK;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,7 +17,7 @@ import java.util.Map;
  * @author : LuTong.Zhao
  * @date : 20:45 2020/8/6
  */
-@FeignClient(value = "eureka-client-coupon-template")
+@FeignClient(value = "eureka-client-coupon-template",fallback = TemplateClientHystrix.class)
 public interface TemplateClient {
     /**
      *<h2>查找所有可用的优惠券模板</h2>
