@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SettlementInfo {
 
-    private Integer userId;
+    private Long userId;
 
     private List<GoodsInfo> goodsInfos;
 
